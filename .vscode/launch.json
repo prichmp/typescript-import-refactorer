@@ -1,0 +1,38 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "pwa-node",
+            "request": "launch",
+            "name": "Dry Run",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "program": "${workspaceFolder}\\src\\index.ts",
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "args": ["--dry-run", "-t", "C:/Prichard/Repos/atl-apps-ui/libs/espec-ui/tsconfig.json", "-s", "C:/Prichard/Repos/atl-apps-ui/libs/espec-ui/src/**/@(*.ts|*.tsx)", "-i", "C:/Prichard/Repos/atl-apps-ui/libs/espec-ui/src/**/@(*.ts|*.tsx)"],
+            "outFiles": [
+                "${workspaceFolder}/build/**/*.js"
+            ]
+        },
+        {
+            "type": "pwa-node",
+            "request": "launch",
+            "name": "Real Run",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "program": "${workspaceFolder}\\src\\index.ts",
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "args": ["-t", "C:/Prichard/Repos/atl-apps-ui/libs/espec-ui/tsconfig.json", "-s", "C:/Prichard/Repos/atl-apps-ui/libs/espec-ui/src/**/@(*.ts|*.tsx)", "-i", "C:/Prichard/Repos/atl-apps-ui/libs/espec-ui/src/**/@(*.ts|*.tsx)"],
+            "outFiles": [
+                "${workspaceFolder}/build/**/*.js"
+            ]
+        },
+    ]
+}
