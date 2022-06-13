@@ -1,9 +1,17 @@
 {
   "name": "typescript-import-refactorer",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "Easily refactor imports in TypeScript files via the CLI.",
   "main": "index.js",
   "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prichmp/typescript-import-refactorer.git"
+  },
+  "homepage": "https://github.com/prichmp/typescript-import-refactorer#readme",
+  "bugs": {
+    "url": "https://github.com/prichmp/typescript-import-refactorer/issues"
+  },
   "keywords": [
     "typescript",
     "import",
