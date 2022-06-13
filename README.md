@@ -41,8 +41,6 @@ Options:
 
 ### Example
 
-You need to pass the `path` (`-p`) to the files that should be refactored, the `current-import-sources` (`-s`) and the `target-import-source` (`-t`).
-
 ```bash
  typescript-import-refactorer -t \"C:/Users/Me/Repos/my-project/tsconfig.json\" -s \"C:/Users/Me/Repos/my-project/src/**/@(*.ts)\" -i \"C:/Users/Me/Repos/my-project/src/**/@(*.ts)\"
 ```
