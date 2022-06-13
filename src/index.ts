@@ -3,6 +3,7 @@ import fs from 'fs';
 import yargs from 'yargs';
 import ImportRefactorer from './ImportRefactorer';
 import { Project, ScriptTarget } from "ts-morph";
+import Logger from './Logger';
 
 /**
  * "source": is a glob that should match the files that have bad imports
@@ -26,6 +27,11 @@ const options = yargs
         boolean: true,
         default: false
     })
+    .option('verbose', {
+        alias: 'v',
+        boolean: true,
+        default: false
+    })
     .argv;
 
 
@@ -41,21 +47,22 @@ const options = yargs
         //skipAddingFilesFromTsConfig: true,
     });
 
-    console.log(`Found ${sourceCodeFilepaths.length} source code files`);
-    console.log(`Found ${possibleImports.length} possible imports`);
+    Logger.verbose = fulfilledOptions['verbose']
+
+    Logger.log(`Found ${sourceCodeFilepaths.length} source code files`);
+    Logger.log(`Found ${possibleImports.length} possible imports`);
 
     const sourceFiles = project.getSourceFiles();
-    console.log(sourceFiles.length)
+    Logger.log(`Typescript project includes ${sourceFiles.length} source files`)
 
     for (const sourceCodeFilepath of sourceCodeFilepaths)
     {
         const fileContents = await readFile(sourceCodeFilepath)
         const sourceCode = project.createSourceFile(sourceCodeFilepath, fileContents, {overwrite: true});
-        //const sourceCode = project.getSourceFile(sourceCodeFilepath);
 
         if (!sourceCode)
         {
-            console.log(chalk.red(`Could not find file "${sourceCodeFilepath}"`));
+            Logger.debug(chalk.red(`Could not find file "${sourceCodeFilepath}"`));
             continue;
         }
 
@@ -66,19 +73,19 @@ const options = yargs
             if (!fulfilledOptions['dry-run'])
             {
                 await newCode.save()
-                console.log(`Wrote out new code to ${sourceCodeFilepath}`);
+                Logger.log(`Wrote out new code to "${sourceCodeFilepath}"`);
             }
         }
         catch (ex)
         {
-            console.log(chalk.red(`Could not process file "${sourceCodeFilepath}"`))
-            console.log(ex)
+            Logger.log(chalk.red(`Could not process file "${sourceCodeFilepath}"`))
+            Logger.log(ex)
         }
     }
 
     async function readFile(filepath: string): Promise<string> 
     {
-        console.log(`Opening file "${filepath}"`)
+        Logger.debug(`Opening file "${filepath}"`)
         const data = await fs.promises.readFile(filepath, 'utf8');
         return data;
     }

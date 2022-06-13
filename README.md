@@ -1,94 +1,56 @@
-# refactor-imports
+# Typescript Import Refactorer
 
-Easily refactor imports in TypeScript files via the CLI.
+Easily refactor relative imports in TypeScript files via the CLI.
+
+Ever move a bunch of Typescript files to new folders, but the imports did not get rewritten to point to the new file locations? This tool works by searching the Typescript project to find files with the same name as the previous import. Only rewrites relative imports. 
 
 ## Installation
 
 ```
-npm install refactor-imports -g
+npm install typescript-import-refactorer -g
 ```
 
 ## Usage
 
 ```
 Options:
-  --help                        Show help                              [boolean]
-  --version                     Show version number                    [boolean]
-  --path, -p                                                          [required]
-  --current-import-sources, -s                                [array] [required]
-  --target-import-source, -t                                          [required]
-  --only-imported-exports, -e                              [array] [default: []]
-  --dry-run, -d                                       [boolean] [default: false]
-  --fuzzy-match, -f                                   [boolean] [default: false]
+  --source 
+  -s
+      REQUIRED
+      A glob containing all of the files with imports that need refactoring.
+      Example: C:/Users/Me/Repos/my-project/src/**/@(*.ts)
+  --imports
+  -i
+      REQUIRED
+      All of the files that could possibly be imported by a source file.
+      Example: C:/Users/Me/Repos/my-project/src/**/@(*.ts)
+  --ts-config
+  -t
+      REQUIRED
+      The absolute path to the tsconfig.json file for the Typescript project
+      Example: C:/Users/Me/Repos/my-project/tsconfig.json
+  --dry-run
+  -d
+      Optional
+      This flag prevents any file from being edited.
+  --verbose
+  -v
+      Optional
+      Prints additional debugging information. 
 ```
 
-### Required Arguments
+### Example
 
 You need to pass the `path` (`-p`) to the files that should be refactored, the `current-import-sources` (`-s`) and the `target-import-source` (`-t`).
 
 ```bash
-refactor-imports -p ./src -s "my-old-lib" -t "my-new-lib"
+ typescript-import-refactorer -t \"C:/Users/Me/Repos/my-project/tsconfig.json\" -s \"C:/Users/Me/Repos/my-project/src/**/@(*.ts)\" -i \"C:/Users/Me/Repos/my-project/src/**/@(*.ts)\"
 ```
 
 ```ts
 // before
-import { foo, bar } from 'my-old-lib';
+import foo from '../../some/old/folder/foo';
 
 // after
-import { foo, bar } from 'my-new-lib';
+import foo from '../new/folder/foo';
 ```
-
-### Multiple Current Import Sources
-
-You can specify more than one current import source if you want to merge imported exports from various import sources into one.
-
-```bash
-refactor-imports -p ./src -s "my-old-lib" "my-even-older-lib" -t "my-new-lib"
-```
-
-```ts
-// before
-import { foo } from 'my-old-lib';
-import { bar } from 'my-even-older-lib';
-
-// after
-import { foo, bar } from 'my-new-lib';
-```
-
-### Refactor only selected Imported Exports
-
-Instead of just replacing whole import sources, you can also move selected imported exports of an import source to a new import source.
-
-```bash
-refactor-imports -p ./src -s "my-old-lib" -t "my-new-lib" -e "foo" "bar"
-```
-
-```ts
-// before
-import { foo, bar, baz } from 'my-old-lib';
-
-// after
-import { baz } from 'my-old-lib';
-import { foo, bar } from 'my-new-lib';
-```
-
-### Fuzzy Matching Import Sources
-
-You can use a regular expressions as `current-import-source` when you add the `fuzzy-match` (`-f`) argument.
-
-```bash
-refactor-imports -p ./src -s "@my-libs/.+" -t "my-new-lib" -f
-```
-
-```ts
-// before
-import { foo } from '@my-libs/old';
-import { bar } from '@my-libs/even-older';
-
-// after
-import { foo, bar } from '@my-libs/new';
-```
-
-## Acknowledgements
-
-The heavy-lifting of this tool is done by Facebook's [jscodeshift](https://github.com/facebook/jscodeshift) and the [transform-imports](https://github.com/suchipi/transform-imports) codemod written by [suchipi](https://github.com/suchipi). Thanks for doing the actual work!
